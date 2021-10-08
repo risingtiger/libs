@@ -1,32 +1,14 @@
-# Prerequisites
-*.d
+**/.pio
+**/.vscode
+**/test
+**/target
+**/include
+**/lib
+**/.ccls-cache
+**/.DS_Store
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+**/npm-debug.log*
+**/node_modules/
+**/.eslintcache
+**/package-lock.json
