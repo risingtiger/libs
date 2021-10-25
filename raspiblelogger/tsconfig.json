@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2019","dom"],
+    "module": "commonjs",
+    "target": "ES2019",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,  
+    "outDir": "build",
+    "sourceMap": true,
+
+    "noImplicitAny": false
+  }, 
+  "include": [   "src/"   ]
+}
