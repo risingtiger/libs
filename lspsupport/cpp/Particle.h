@@ -73,20 +73,11 @@ class ParticleClass {
     void variable(const char*, int);                                                                                                                                                
     void variable(const char*, String);                                                                                                                                                
     void function(const char*, int(*)(String));
+    void disconnect();
+    void connect();
+    bool connected();
 };
 ParticleClass Particle;
-
-
-
-
-class SystemClass {                                                                                                                                               
-  public:                                                                                                                                                        
-    SystemClass();                                                         
-    void reset();                                                         
-    bool deviceID();                                                                                                                                                
-    int batteryState();
-};
-SystemClass System;
 
 
 
@@ -106,6 +97,8 @@ class CellularClass {
   public:
     CellularClass();
     CellularSignal RSSI();
+    void off();
+    void on();
 };
 CellularClass Cellular;
 
@@ -120,6 +113,52 @@ class EEPROMClass {
 };
 EEPROMClass EEPROM;
 
+
+
+
+class BLEClass {                                                                                                                                               
+  public:                                                                                                                                                        
+    BLEClass();                                                         
+    void on();                                                         
+    bool off();                                                                                                                                                
+};
+BLEClass BLE;
+
+
+
+
+class SystemSleepConfiguration {
+  public:
+    SystemSleepConfiguration();
+    SystemSleepConfiguration& mode(uint32_t);
+    SystemSleepConfiguration& duration(uint32_t);
+};
+
+class SystemSleepResult {
+  public:
+    SystemSleepResult();
+    SystemSleepConfiguration& mode(uint32_t);
+    SystemSleepConfiguration& duration(uint32_t);
+};
+
+class SystemSleepMode {
+  public:
+    SystemSleepMode();
+    static uint8_t ULTRA_LOW_POWER;
+};
+
+
+
+
+class SystemClass {                                                                                                                                               
+  public:                                                                                                                                                        
+    SystemClass();                                                         
+    void reset();                                                         
+    bool deviceID();                                                                                                                                                
+    int batteryState();
+    SystemSleepResult sleep(SystemSleepConfiguration);
+};
+SystemClass System;
 
 
 
