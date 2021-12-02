@@ -3,6 +3,7 @@
 #ifndef SyntaxBase_h
 #define SyntaxBase_h
 
+#include "jibbersmat.h"
 
 #define NULL nullptr
 
@@ -47,10 +48,20 @@ uint32_t millis();
 uint32_t micros();
 uint32_t map(int, int, int, int, int);
 void memcpy(uint8_t[], uint8_t[], int);
+void memset(uint8_t[], unsigned char, uint32_t);
 //uint32_t atoi(char*);
 //void free(const char *);
 //char* strtok(char*, const char *);
 
+
+
+
+void sprintf(char*, const char*, uint8_t);
+void sprintf(char*, const char*, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t);
+void sprintf(char*, const char*, char*, char*, int32_t, int32_t, uint8_t);
+
+void strcat(char*, const char*);
+void strcat(char*, char*);
 
 
 
@@ -161,6 +172,13 @@ class Timer {
     void start();
     void changePeriod(uint32_t);     
 };
+
+
+
+
+
+
+
 
 
 

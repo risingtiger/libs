@@ -1,15 +1,7 @@
-**/.pio
-**/.vscode
-**/test
-**/target
-**/include
-**/lib
-**/.ccls-cache
-**/.DS_Store
+/node_modules
+/build
+/prebuild
+/.vscode/
 
 
-**/npm-debug.log*
-**/node_modules/
-**/.eslintcache
-**/package-lock.json
-**/build
+.DS_Store

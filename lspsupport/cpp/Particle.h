@@ -8,10 +8,6 @@
 
 
 
-#define NULL nullptr
-
-
-
 
 #define A0 (uint8_t)1
 #define A1 (uint8_t)2
