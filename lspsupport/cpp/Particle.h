@@ -1,6 +1,5 @@
 
 
-
 #ifndef ParticleFill_h
 #define ParticleFill_h
 
@@ -155,6 +154,18 @@ class SystemClass {
     SystemSleepResult sleep(SystemSleepConfiguration);
 };
 SystemClass System;
+
+
+
+
+class RGBClass {                                                                                                                                               
+  public:                                                                                                                                                        
+    RGB();                                                         
+    void control(bool);                                                         
+    void color(int, int, int);                                                                                                                                                
+    void brightness(int);
+};
+RGBClass RGB;
 
 
 

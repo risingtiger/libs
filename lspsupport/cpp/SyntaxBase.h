@@ -33,6 +33,17 @@ uint16_t SPI_MODE0;
 
 
 
+void strncpy(char*, char*, uint32_t);
+char* strtok(char*, const char*);
+char* strtok(char*, char*);
+uint16_t atoi(char*);
+void memset(char*, char, int);
+void memset(uint16_t*, int, int);
+/* void memset(uint8_t*, char, int); */
+
+
+
+
 void digitalWrite(uint8_t, uint8_t);
 void digitalWriteFast(uint8_t, uint8_t);
 uint8_t digitalRead(uint8_t);
@@ -56,9 +67,17 @@ void memset(uint8_t[], unsigned char, uint32_t);
 
 
 
-void sprintf(char*, const char*, uint8_t);
-void sprintf(char*, const char*, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t);
-void sprintf(char*, const char*, char*, char*, int32_t, int32_t, uint8_t);
+void sprintf(char*, const char*, int);
+void sprintf(char*, const char*, char*, char*, int, int);
+void sprintf(char*, const char*, char*, char*, int);
+void sprintf(char*, const char*, int, int, int, int);
+void sprintf(char*, const char*, int, int, int, int, int);
+void sprintf(char*, const char*, int, int, int, int, int, int, int, int);
+void sprintf(char*, const char*, char*, char*, int, int, int);
+void sprintf(char*, const char*, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int );
+void sprintf(char*, const char*, int, int );
+void sprintf(char*, const char*, int, int, int, int, int, int, int, int, int, int, int );
+void sprintf(char*, const char*, int, int, int );
 
 void strcat(char*, const char*);
 void strcat(char*, char*);
@@ -95,7 +114,7 @@ class WireClass {
     uint16_t available();
     uint16_t read();
     void begin();
-    void begin(uint8_t, uint8_t, int);
+    void begin(int, int, int);
 
 
   private:
@@ -174,6 +193,7 @@ class Timer {
 };
 
 
+int RF_PACONFIG_PASELECT_PABOOST = 0;
 
 
 
