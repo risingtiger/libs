@@ -30,6 +30,10 @@ uint8_t  PRIVATE;
 uint8_t  WITH_ACK;
 uint8_t  PLATFORM_ID;
 uint32_t CLOCK_SPEED_400KHZ;
+uint8_t  FALLING;
+uint8_t  RISING;
+uint8_t  CHANGE;
+uint8_t  time_changed;
 
 void SYSTEM_THREAD(int);
 void PRODUCT_ID(int);                                                                     
@@ -58,6 +62,7 @@ typedef enum {
 void SYSTEM_THREAD(uint8_t);
 void PRODUCT_ID(uint32_t);                                                                                                                                                   
 void PRODUCT_VERSION(uint32_t);
+void attachInterrupt(int, void (*)(), int);
 
 
 
@@ -148,6 +153,7 @@ class SystemSleepMode {
 class SystemClass {                                                                                                                                               
   public:                                                                                                                                                        
     SystemClass();                                                         
+    void on(uint8_t, void[](){});                                                         
     void reset();                                                         
     bool deviceID();                                                                                                                                                
     int batteryState();

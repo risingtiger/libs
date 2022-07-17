@@ -39,9 +39,10 @@ char* strtok(char*, char*);
 uint16_t atoi(char*);
 void memset(char*, char, int);
 void memset(uint16_t*, int, int);
-/* void memset(uint8_t*, char, int); */
-
-
+void memset(uint8_t[], unsigned char, uint32_t);
+void memcpy(uint8_t[], uint8_t[], int);
+void memcpy(int16_t[], int16_t[], int);
+uint32_t map(int, int, int, int, int);
 
 
 void digitalWrite(uint8_t, uint8_t);
@@ -57,9 +58,6 @@ void analogWrite(uint8_t, uint8_t);
 void pinMode(uint8_t, uint8_t);
 uint32_t millis();
 uint32_t micros();
-uint32_t map(int, int, int, int, int);
-void memcpy(uint8_t[], uint8_t[], int);
-void memset(uint8_t[], unsigned char, uint32_t);
 //uint32_t atoi(char*);
 //void free(const char *);
 //char* strtok(char*, const char *);
