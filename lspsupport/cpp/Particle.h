@@ -34,6 +34,7 @@ uint8_t  FALLING;
 uint8_t  RISING;
 uint8_t  CHANGE;
 uint8_t  time_changed;
+uint8_t  LOG_LEVEL_INFO;
 
 void SYSTEM_THREAD(int);
 void PRODUCT_ID(int);                                                                     
@@ -82,6 +83,15 @@ ParticleClass Particle;
 
 
 
+class PMIC {
+  public:
+    PMICClass();
+    bool isPowerGood();
+};
+
+
+
+
 class CellularSignal {
   public:
     CellularSignal();
@@ -89,6 +99,18 @@ class CellularSignal {
     float getQuality();
 };
 CellularSignal CellularSignal_I;
+
+
+
+
+class WiFiClass {
+  public:
+    WiFiClass();
+    WiFiSignal RSSI();
+    void off();
+    void on();
+};
+WiFiClass WiFi;
 
 
 
@@ -172,6 +194,16 @@ class RGBClass {
     void brightness(int);
 };
 RGBClass RGB;
+
+
+
+
+class SerialLogHandler {                                                                                                                                               
+  public:                                                                                                                                                        
+    SerialLogHandler(uint8_t);                                                         
+    info(char*, ...);                                                         
+};
+SerialLogHandler Log;
 
 
 
