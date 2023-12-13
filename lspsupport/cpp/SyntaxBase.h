@@ -3,10 +3,11 @@
 #ifndef SyntaxBase_h
 #define SyntaxBase_h
 
-#include "jibbersmat.h"
+//#include "jibbersmat.h"
 
 #define NULL nullptr
 
+typedef char byte;
 typedef signed char int8_t;
 typedef short int16_t;
 typedef long int int32_t;
@@ -15,7 +16,6 @@ typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned long int uint32_t;
 typedef unsigned long long uint64_t;
-typedef long unsigned int size_t;
 
 
 
@@ -60,7 +60,7 @@ uint32_t analogWriteResolution(uint8_t, uint8_t);
 uint32_t analogWriteResolution(uint8_t);
 uint32_t millis();
 uint32_t micros();
-uint32_t delay(in);
+//uint32_t delay(in);
 //uint32_t atoi(char*);
 //void free(const char *);
 //char* strtok(char*, const char *);
@@ -175,6 +175,7 @@ class TimeClass {
     uint32_t now();
     uint32_t hour();
     uint32_t minute();
+    uint32_t second();
     uint32_t month();
 
   private:

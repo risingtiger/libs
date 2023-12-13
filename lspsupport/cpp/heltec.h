@@ -35,7 +35,7 @@ class HeltecClass {
   public: 
     HeltecClass(); 
     void begin(bool, bool, bool, int, int); 
-    Display* display 
+    Display* display; 
 }; 
 HeltecClass Heltec; 
 
@@ -54,6 +54,7 @@ class LoRaClass {
     void write(uint8_t);
     void endPacket();
     bool available();
+    void onReceive(void (*c)(int));
 };
 LoRaClass LoRa;
 

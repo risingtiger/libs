@@ -83,11 +83,12 @@ ParticleClass Particle;
 
 
 
-class PMIC {
+class PMICClass {
   public:
     PMICClass();
     bool isPowerGood();
 };
+PMICClass PMIC;
 
 
 
@@ -106,7 +107,7 @@ CellularSignal CellularSignal_I;
 class WiFiClass {
   public:
     WiFiClass();
-    WiFiSignal RSSI();
+    WiFiClass RSSI();
     void off();
     void on();
 };
@@ -172,23 +173,9 @@ class SystemSleepMode {
 
 
 
-class SystemClass {                                                                                                                                               
-  public:                                                                                                                                                        
-    SystemClass();                                                         
-    void on(uint8_t, void[](){});                                                         
-    void reset();                                                         
-    bool deviceID();                                                                                                                                                
-    int batteryState();
-    SystemSleepResult sleep(SystemSleepConfiguration);
-};
-SystemClass System;
-
-
-
-
 class RGBClass {                                                                                                                                               
   public:                                                                                                                                                        
-    RGB();                                                         
+    RGBClass();                                                         
     void control(bool);                                                         
     void color(int, int, int);                                                                                                                                                
     void brightness(int);
@@ -200,10 +187,40 @@ RGBClass RGB;
 
 class SerialLogHandler {                                                                                                                                               
   public:                                                                                                                                                        
+    SerialLogHandler();                                                         
     SerialLogHandler(uint8_t);                                                         
-    info(char*, ...);                                                         
+    void error(const char *x);                                                         
+    void info(const char *x, uint8_t, uint8_t);                                                         
 };
-SerialLogHandler Log;
+SerialLogHandler Logger;
+
+
+
+
+struct PublishFlags {                                                                                                                                               
+  int propa;
+};
+
+
+
+
+class SystemClass {
+  public:
+    static void reset();
+    void deviceID(void);
+    void batteryState();
+    void on(uint8_t, void (*)());
+    SystemSleepResult sleep(SystemSleepConfiguration);
+};
+
+extern SystemClass System;
+
+
+
+
+
+
+
 
 
 
