@@ -4,6 +4,12 @@
 #define ParticleFill_h
 
 #include "SyntaxBase.h"
+#include "SPI.h"
+ 
+typedef unsigned char uint8_t;
+typedef unsigned int uint32_t;
+typedef unsigned short uint16_t;
+typedef int int32_t;
 
 
 
@@ -26,15 +32,16 @@
 #define D7 (uint8_t)11
 #define D8 (uint8_t)11
 
-uint8_t  PRIVATE;
-uint8_t  WITH_ACK;
-uint8_t  PLATFORM_ID;
-uint32_t CLOCK_SPEED_400KHZ;
-uint8_t  FALLING;
-uint8_t  RISING;
-uint8_t  CHANGE;
-uint8_t  time_changed;
-uint8_t  LOG_LEVEL_INFO;
+
+#define PRIVATE 0
+#define WITH_ACK 0
+#define PLATFORM_ID 0
+#define CLOCK_SPEED_400KHZ 0
+#define FALLING 0
+#define RISING 0
+#define CHANGE 0
+#define time_changed 0
+#define LOG_LEVEL_INFO 0
 
 void SYSTEM_THREAD(int);
 void PRODUCT_ID(int);                                                                     
@@ -60,10 +67,12 @@ typedef enum {
 
 
 
-void SYSTEM_THREAD(uint8_t);
-void PRODUCT_ID(uint32_t);                                                                                                                                                   
-void PRODUCT_VERSION(uint32_t);
+void SYSTEM_THREAD(int);
+void PRODUCT_ID(int);                                                                                                                                                   
+void PRODUCT_VERSION(int);
 void attachInterrupt(int, void (*)(), int);
+
+SPIClass SPI;
 
 
 
@@ -72,23 +81,30 @@ class ParticleClass {
   public:                                                                                                                                                        
     ParticleClass();                                                         
     void variable(const char*, int);                                                                                                                                                
-    void variable(const char*, String);                                                                                                                                                
-    void function(const char*, int(*)(String));
+    bool function(const char*, int(*)(String));
     void disconnect();
     void connect();
     bool connected();
+    bool publish(const char*, const char*, int);
 };
 ParticleClass Particle;
 
 
 
 
-class PMICClass {
+class PMIC {
   public:
-    PMICClass();
-    bool isPowerGood();
+    PMIC(bool);
+	int getVbusStat();
+	int getChargingStat();
+	bool    getDPMStat();
+	bool    isPowerGood();
+	bool    getVsysStat();
+
+
+	~PMIC();
 };
-PMICClass PMIC;
+//PMICClass PMIC;
 
 
 
@@ -153,21 +169,21 @@ BLEClass BLE;
 class SystemSleepConfiguration {
   public:
     SystemSleepConfiguration();
-    SystemSleepConfiguration& mode(uint32_t);
-    SystemSleepConfiguration& duration(uint32_t);
+    SystemSleepConfiguration& mode(int);
+    SystemSleepConfiguration& duration(int);
 };
 
 class SystemSleepResult {
   public:
     SystemSleepResult();
-    SystemSleepConfiguration& mode(uint32_t);
-    SystemSleepConfiguration& duration(uint32_t);
+    SystemSleepConfiguration& mode(int);
+    SystemSleepConfiguration& duration(int);
 };
 
 class SystemSleepMode {
   public:
     SystemSleepMode();
-    static uint8_t ULTRA_LOW_POWER;
+    static int ULTRA_LOW_POWER;
 };
 
 
@@ -188,11 +204,10 @@ RGBClass RGB;
 class SerialLogHandler {                                                                                                                                               
   public:                                                                                                                                                        
     SerialLogHandler();                                                         
-    SerialLogHandler(uint8_t);                                                         
     void error(const char *x);                                                         
-    void info(const char *x, uint8_t, uint8_t);                                                         
+    void info(const char *x, ...);                                                         
 };
-SerialLogHandler Logger;
+SerialLogHandler Log;
 
 
 
@@ -208,18 +223,13 @@ class SystemClass {
   public:
     static void reset();
     void deviceID(void);
-    void batteryState();
-    void on(uint8_t, void (*)());
+    int batteryState();
+    int powerSource();
+    void on(int, void (*)());
     SystemSleepResult sleep(SystemSleepConfiguration);
 };
 
 extern SystemClass System;
-
-
-
-
-
-
 
 
 

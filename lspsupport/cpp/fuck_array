@@ -1,0 +1,96 @@
+#include "Particle.h"
+#include <initializer_list>
+
+#ifndef ArrayFUcker_h
+#define ArrayFUcker_h
+
+# define _GLIBCXX_VISIBILITY(V) __attribute__ ((__visibility__ (#V)))
+# define _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
+# define _GLIBCXX_END_NAMESPACE_CONTAINER
+
+namespace std _GLIBCXX_VISIBILITY(default)
+{
+_GLIBCXX_BEGIN_NAMESPACE_CONTAINER
+
+ // Forward declare the array template                                                                               
+ template<typename _Tp, uint8_t _Nm>                                                                                 
+ struct array;                                                                                                       
+                                                                                                                     
+ // Add this using declaration                                                                                       
+ using std::array;   
+
+
+
+  template<typename _Tp, uint8_t _Nm>
+    struct __array_traits
+    {
+      typedef _Tp _Type[_Nm];
+
+      static constexpr _Tp*
+      _S_ptr(const _Type& __t) noexcept
+      { return const_cast<_Tp*>(__t); }
+    };
+
+
+  /**
+   *  @brief A standard container for storing a fixed size sequence of elements.
+   *
+   *  @ingroup sequences
+   *
+   *  Meets the requirements of a <a href="tables.html#65">container</a>, a
+   *  <a href="tables.html#66">reversible container</a>, and a
+   *  <a href="tables.html#67">sequence</a>.
+   *
+   *  Sets support random access iterators.
+   *
+   *  @tparam  Tp  Type of element. Required to be a complete type.
+   *  @tparam  Nm  Number of elements.
+  */
+  template<typename _Tp, uint8_t _Nm>
+    struct array
+    {
+      typedef _Tp                             value_type;
+      typedef value_type*                     pointer;
+      typedef const value_type*               const_pointer;
+      typedef value_type&                     reference;
+      typedef const value_type&               const_reference;
+      typedef value_type*                     iterator;
+      typedef const value_type*               const_iterator;
+      typedef uint8_t                         size_type;
+
+      // Add the actual array storage
+      typename __array_traits<_Tp, _Nm>::_Type _M_elems;
+
+      // Add a constructor that allows initialization with an initializer list
+      constexpr array(std::initializer_list<_Tp> init) {
+          auto it = init.begin();
+          for (size_type i = 0; i < _Nm && it != init.end(); ++i, ++it) {
+              _M_elems[i] = *it;
+          }
+          // If the initializer list is smaller than _Nm, fill the rest with default values
+          for (size_type i = init.size(); i < _Nm; ++i) {
+              _M_elems[i] = _Tp();
+          }
+      }
+
+      // Add a default constructor
+      constexpr array() : _M_elems() {}
+
+      // Subscript operator for non-const objects
+      constexpr reference operator[](size_type __n) noexcept
+      { return _M_elems[__n]; }
+
+      // Subscript operator for const objects
+      constexpr const_reference operator[](size_type __n) const noexcept
+      { return _M_elems[__n]; }
+
+      // Size function
+      constexpr size_type size() const noexcept { return _Nm; }
+    };
+
+ _GLIBCXX_END_NAMESPACE_CONTAINER   
+
+} // namespace std
+
+#endif
+
