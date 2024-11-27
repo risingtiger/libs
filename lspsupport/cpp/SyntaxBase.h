@@ -28,6 +28,7 @@
 #define MSBFIRST  3
 #define SPI_MODE0  3
 #define GPIO_NUM_0  0
+#define  GPIO_NUM_7  0
 #define  GPIO_NUM_8  3
 #define GPIO_NUM_9  0
 #define GPIO_NUM_10  0
@@ -37,7 +38,10 @@
 #define  GPIO_NUM_14  3
 #define GPIO_NUM_17 0
 #define GPIO_NUM_18 0
+#define GPIO_NUM_19 0
+#define GPIO_NUM_20 0
 #define GPIO_NUM_21 0
+#define GPIO_NUM_26 0
 #define GPIO_NUM_35 0
 #define GEOMETRY_128_64 0
 
@@ -60,6 +64,7 @@ void pinResetFast(int);
 void pinSetFast(int);
 int pinReadFast(int);
 void analogWrite(int, int, int);
+void analogWrite(int, int);
 void pinMode(int, int);
 int analogWriteResolution(int, int);
 int millis();
@@ -95,12 +100,14 @@ class WireClass {
     int available();
     int read();
     void begin();
+    void begin(int, int);
 
 
   private:
     void sometin();
 };
 WireClass Wire;
+WireClass Wire1;
 
 
 
@@ -129,6 +136,7 @@ class String {
 class SerialClass {
   public:
     SerialClass();
+    void begin();
     void begin(int);
     void begin(int, int, int, int);
     void print(String);

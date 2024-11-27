@@ -21,6 +21,7 @@ class SSD1306Wire {
     void setFont(int);
     void setTextAlignment(int);
     void drawString(int, int, String);
+    void drawString(int, int, String*);
     void display();
     void flipScreenVertically();
     void displayOff();
