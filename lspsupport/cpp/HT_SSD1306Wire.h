@@ -12,9 +12,16 @@
 #define TEXT_ALIGN_RIGHT 1
 
 
+#define SDA_OLED 4
+#define SCL_OLED 5
+#define RST_OLED 16
+
+#define ANGLE_180_DEGREE 0
+
+
 class SSD1306Wire {
   public:
-    SSD1306Wire(int, int, int, int);
+    SSD1306Wire(int, int, int, int, int, int);
     void init();
     void clear();
     void setContrast(int);
@@ -24,6 +31,7 @@ class SSD1306Wire {
     void drawString(int, int, String*);
     void display();
     void flipScreenVertically();
+	void screenRotate(int);
     void displayOff();
 };
 

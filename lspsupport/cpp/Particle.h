@@ -42,10 +42,17 @@ typedef int int32_t;
 #define CHANGE 0
 #define time_changed 0
 #define LOG_LEVEL_INFO 0
+#define SEMI_AUTOMATIC 0
+#define ENABLED 0
+#define SETTING_FIRMWARE_VERSION 0
 
-void SYSTEM_THREAD(int);
-void PRODUCT_ID(int);                                                                     
-void PRODUCT_VERSION(int);
+#define SYSTEM_MODE(a)
+#define SYSTEM_THREAD(a)
+#define PRODUCT_VERSION(a)
+
+void attachInterrupt(int, void (*)(), int);
+
+
 
 typedef enum {
   BATTERY_STATE_UNKNOWN = 0,
@@ -67,10 +74,6 @@ typedef enum {
 
 
 
-void SYSTEM_THREAD(int);
-void PRODUCT_ID(int);                                                                                                                                                   
-void PRODUCT_VERSION(int);
-void attachInterrupt(int, void (*)(), int);
 
 SPIClass SPI;
 
@@ -161,7 +164,7 @@ class BLEClass {
     void on();                                                         
     bool off();                                                                                                                                                
 };
-BLEClass BLE;
+BLEClass BLE();
 
 
 

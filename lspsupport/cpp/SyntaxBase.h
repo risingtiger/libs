@@ -28,14 +28,14 @@
 #define MSBFIRST  3
 #define SPI_MODE0  3
 #define GPIO_NUM_0  0
-#define  GPIO_NUM_7  0
-#define  GPIO_NUM_8  3
+#define GPIO_NUM_7  0
+#define GPIO_NUM_8  3
 #define GPIO_NUM_9  0
 #define GPIO_NUM_10  0
 #define GPIO_NUM_11  0
-#define  GPIO_NUM_12  3
-#define  GPIO_NUM_13  3
-#define  GPIO_NUM_14  3
+#define GPIO_NUM_12  3
+#define GPIO_NUM_13  3
+#define GPIO_NUM_14  3
 #define GPIO_NUM_17 0
 #define GPIO_NUM_18 0
 #define GPIO_NUM_19 0
@@ -54,6 +54,7 @@ int atoi(char*);
 void memset(char*, char, int);
 void memcpy(int[], int[], int);
 int map(int, int, int, int, int);
+int strlen(const char* str);
 
 
 void digitalWrite(int, int);
@@ -142,6 +143,7 @@ class SerialClass {
     void print(String);
     void println(int);
     void println(const char[]);
+	void printf(const char* format, ...);
     int available();
     int read();
 
