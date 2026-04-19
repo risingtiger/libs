@@ -5,11 +5,15 @@
 
 #include "SyntaxBase.h"
 #include "SPI.h"
+// #include <functional>
  
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
 typedef unsigned short uint16_t;
 typedef int int32_t;
+typedef unsigned int size_t;
+
+typedef SerialClass HardwareSerial;
 
 
 
@@ -49,6 +53,8 @@ typedef int int32_t;
 #define SYSTEM_MODE(a)
 #define SYSTEM_THREAD(a)
 #define PRODUCT_VERSION(a)
+#define PRODUCT_ID(a)
+#define SERIAL_8N1 0
 
 void attachInterrupt(int, void (*)(), int);
 
@@ -80,6 +86,8 @@ SPIClass SPI;
 
 
 
+class CloudEvent;
+
 class ParticleClass {                                                                                                                                               
   public:                                                                                                                                                        
     ParticleClass();                                                         
@@ -89,6 +97,7 @@ class ParticleClass {
     void connect();
     bool connected();
     bool publish(const char*, const char*, int);
+    void publish(CloudEvent);
 };
 ParticleClass Particle;
 
@@ -222,6 +231,20 @@ struct PublishFlags {
 
 
 
+class CloudEvent {
+  public:
+    CloudEvent();
+    void name(const char*);
+    void data(const char*);
+    template<typename F> void onStatusChange(F);
+    bool isOk();
+    bool isSent();
+};
+
+
+
+
+
 class SystemClass {
   public:
     static void reset();
@@ -238,7 +261,6 @@ extern SystemClass System;
 
 
 #endif 
-
 
 
 

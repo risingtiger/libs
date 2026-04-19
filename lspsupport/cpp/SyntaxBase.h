@@ -97,6 +97,7 @@ class WireClass {
     void beginTransmission(int);
     void write(int);
     char endTransmission();
+    void requestFrom(int, int);
     void requestFrom(int, int, bool);
     int available();
     int read();
@@ -139,13 +140,23 @@ class SerialClass {
     SerialClass();
     void begin();
     void begin(int);
+    void begin(unsigned long);
+    void begin(unsigned long, unsigned int);
     void begin(int, int, int, int);
     void print(String);
     void println(int);
     void println(const char[]);
 	void printf(const char* format, ...);
     int available();
+    int availableForWrite();
+    int peek();
     int read();
+    void flush();
+    int write(unsigned char);
+    int write(unsigned short);
+    int write(const unsigned char*, int);
+    int write(const char*);
+    operator bool() const;
 
   private:
     void sometin();
@@ -195,7 +206,6 @@ void memcpy(ArgsT ...args);
 
 
 #endif 
-
 
 
 
