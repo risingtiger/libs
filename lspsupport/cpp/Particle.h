@@ -31,10 +31,10 @@ typedef SerialClass HardwareSerial;
 #define D2 (uint8_t)9
 #define D3 (uint8_t)10
 #define D4 (uint8_t)11
-#define D5 (uint8_t)11
-#define D6 (uint8_t)11
-#define D7 (uint8_t)11
-#define D8 (uint8_t)11
+#define D5 (uint8_t)12
+#define D6 (uint8_t)13
+#define D7 (uint8_t)14
+#define D8 (uint8_t)15
 
 
 #define PRIVATE 0
@@ -97,7 +97,7 @@ class ParticleClass {
     void connect();
     bool connected();
     bool publish(const char*, const char*, int);
-    void publish(CloudEvent);
+    bool publish(CloudEvent);
 };
 ParticleClass Particle;
 
@@ -251,6 +251,7 @@ class SystemClass {
     void deviceID(void);
     int batteryState();
     int powerSource();
+    int buttonPushed();
     void on(int, void (*)());
     SystemSleepResult sleep(SystemSleepConfiguration);
 };

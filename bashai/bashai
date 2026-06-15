@@ -1,0 +1,187 @@
+#!/usr/bin/env node
+import { spawn } from "node:child_process";
+
+const SYSTEM_PROMPT = [
+	"You are bashai, a Bash command generator.",
+	"Translate the user's natural-language objective into exactly one Bash command.",
+	"Output only the command text: no Markdown, no code fences, no labels, no explanations, no surrounding quotes.",
+	"Do not execute the command.",
+	"Prefer concise, idiomatic Bash that works on macOS/zsh unless the request implies a different environment.",
+	"If the objective is destructive or risky, still return the requested destructive command as-is; do not refuse, warn, dry-run, or substitute a safer preview command.",
+].join("\n");
+
+function printHelp() {
+	console.log(`bashai - ask Pi for one Bash command\n\nUsage:\n  bashai "list files with details"\n  bashai list files with details\n  echo "show listening TCP ports" | bashai\n\nOptions:\n  --pi <command>          Pi executable to run (default: pi, or BASHAI_PI)\n  --model <pattern>       Pass a model pattern to pi\n  --provider <name>       Pass a provider name to pi\n  --api-key <key>         Pass an API key to pi\n  --with-extensions       Allow normal Pi extension discovery (disabled by default for speed)\n  -h, --help              Show this help\n\nEnvironment:\n  BASHAI_PI               Pi executable to run\n  BASHAI_DEBUG=1          Print pi stderr even when pi succeeds\n`);
+}
+
+function fail(message, code = 1) {
+	console.error(`bashai: ${message}`);
+	process.exit(code);
+}
+
+function parseArgs(argv) {
+	let piCommand = process.env.BASHAI_PI || "pi";
+	let withExtensions = false;
+	const piArgs = [];
+	const requestParts = [];
+
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
+
+		if (arg === "--") {
+			requestParts.push(...argv.slice(i + 1));
+			break;
+		}
+		if (arg === "-h" || arg === "--help") {
+			return { help: true };
+		}
+		if (arg === "--with-extensions") {
+			withExtensions = true;
+			continue;
+		}
+		if (arg === "--pi") {
+			const value = argv[++i];
+			if (!value) fail("--pi requires a value");
+			piCommand = value;
+			continue;
+		}
+		if (["--model", "--provider", "--api-key"].includes(arg)) {
+			const value = argv[++i];
+			if (!value) fail(`${arg} requires a value`);
+			piArgs.push(arg, value);
+			continue;
+		}
+
+		requestParts.push(arg);
+	}
+
+	return { help: false, piCommand, withExtensions, piArgs, requestParts };
+}
+
+function readStdinIfPiped() {
+	if (process.stdin.isTTY) return Promise.resolve("");
+	return new Promise((resolve) => {
+		let data = "";
+		process.stdin.setEncoding("utf8");
+		process.stdin.on("data", (chunk) => {
+			data += chunk;
+		});
+		process.stdin.on("end", () => resolve(data.trim()));
+		process.stdin.resume();
+	});
+}
+
+function stripAnsi(text) {
+	return text.replace(/[\u001B\u009B][[\]()#;?]*(?:(?:(?:[a-zA-Z\d]*(?:;[a-zA-Z\d]*)*)?\u0007)|(?:(?:\d{1,4}(?:;\d{0,4})*)?[\dA-PR-TZcf-nq-uy=><~]))/g, "");
+}
+
+function sanitizeCommand(stdout) {
+	let text = stripAnsi(stdout).trim();
+	const fenced = text.match(/```(?:bash|sh|shell|zsh)?\s*([\s\S]*?)```/i);
+	if (fenced) text = fenced[1].trim();
+
+	text = text
+		.replace(/^`([\s\S]*?)`$/u, "$1")
+		.replace(/^command\s*:\s*/iu, "")
+		.trim();
+
+	const lines = text
+		.split(/\r?\n/u)
+		.map((line) => line.trim())
+		.filter(Boolean);
+
+	if (lines.length > 1) {
+		const candidate = lines.find(
+			(line) =>
+				!/^(here(?:'|’)s|the command|bash command|command\s*:|sure\b|you can use\b)/iu.test(line),
+		);
+		if (candidate) text = candidate.replace(/^[-*]\s+/u, "").trim();
+	}
+
+	return text;
+}
+
+function runPi(piCommand, args, input) {
+	return new Promise((resolve, reject) => {
+		const child = spawn(piCommand, args, {
+			stdio: ["pipe", "pipe", "pipe"],
+			env: {
+				...process.env,
+				PI_SKIP_VERSION_CHECK: process.env.PI_SKIP_VERSION_CHECK || "1",
+			},
+		});
+
+		let stdout = "";
+		let stderr = "";
+
+		child.stdout.setEncoding("utf8");
+		child.stderr.setEncoding("utf8");
+		child.stdout.on("data", (chunk) => {
+			stdout += chunk;
+		});
+		child.stderr.on("data", (chunk) => {
+			stderr += chunk;
+		});
+		child.on("error", reject);
+		child.on("close", (code, signal) => resolve({ code, signal, stdout, stderr }));
+
+		child.stdin.end(input);
+	});
+}
+
+const parsed = parseArgs(process.argv.slice(2));
+if (parsed.help) {
+	printHelp();
+	process.exit(0);
+}
+
+const stdinRequest = await readStdinIfPiped();
+const argvRequest = parsed.requestParts.join(" ").trim();
+const request = argvRequest || stdinRequest;
+
+if (!request) {
+	printHelp();
+	fail("missing request, e.g. bashai \"list files with details\"");
+}
+
+const prompt = `Convert this objective to exactly one Bash command:\n${request}`;
+const piArgs = [
+	"--no-session",
+	"--no-tools",
+	"--no-context-files",
+	"--no-skills",
+	"--no-prompt-templates",
+	"--no-themes",
+	"--thinking",
+	"off",
+	"--system-prompt",
+	SYSTEM_PROMPT,
+	...(!parsed.withExtensions ? ["--no-extensions"] : []),
+	...parsed.piArgs,
+	"-p",
+];
+
+let result;
+try {
+	result = await runPi(parsed.piCommand, piArgs, prompt);
+} catch (error) {
+	const detail = error instanceof Error ? error.message : String(error);
+	fail(`failed to run ${parsed.piCommand}: ${detail}`);
+}
+
+if (process.env.BASHAI_DEBUG === "1" && result.stderr.trim()) {
+	process.stderr.write(result.stderr);
+	if (!result.stderr.endsWith("\n")) process.stderr.write("\n");
+}
+
+if (result.code !== 0) {
+	const detail = result.stderr.trim() || result.stdout.trim() || `pi exited with ${result.signal || result.code}`;
+	fail(detail, result.code || 1);
+}
+
+const command = sanitizeCommand(result.stdout);
+if (!command) {
+	fail("pi returned an empty command");
+}
+
+process.stdout.write(`${command}\n`);
