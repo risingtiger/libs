@@ -1,0 +1,10 @@
+clang
+%c -std=c14
+%cpp -std=c++2a
+%h -x
+%h c++-header
+-isystem/Library/Developer/CommandLineTools/usr/include/
+-isystem/Library/Developer/CommandLineTools/usr/include/c++/v1
+-isystem/Users/xenition/Code/libs/lspsupport/cpp/syntax
+-isystem/Users/xenition/Code/libs/lspsupport/cpp/syntax/heltec
+
